@@ -10,4 +10,4 @@ redirects:
 
   site2.domain.com:
     to: https://www.google.com/
-    with: 302
+    with: 303
