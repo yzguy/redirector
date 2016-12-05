@@ -6,17 +6,21 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"strconv"
 )
 
 type Config struct {
 	Server    Server
-	Redirects map[string]map[string]string
+	Redirects map[string]Redirect
 }
 
 type Server struct {
 	Address string `yaml:"address"`
 	Port    int    `yaml:"port"`
+}
+
+type Redirect struct {
+	To   string `yaml:"to"`
+	With int    `yaml:"with"`
 }
 
 func main() {
@@ -35,10 +39,7 @@ func main() {
 
 	// Setup handler for redirects
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		to := config.Redirects[r.Host]["to"]
-		with, _ := strconv.Atoi(config.Redirects[r.Host]["with"])
-
-		http.Redirect(w, r, to, with)
+		http.Redirect(w, r, config.Redirects[r.Host].To, config.Redirects[r.Host].With)
 	})
 
 	// Start HTTP Server
