@@ -39,7 +39,11 @@ func main() {
 
 	// Setup handler for redirects
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		http.Redirect(w, r, config.Redirects[r.Host].To, config.Redirects[r.Host].With)
+		To := config.Redirects[r.Host].To
+		With := config.Redirects[r.Host].With
+
+		log.Printf("Client: %s %s -> %s (%d)\n", r.RemoteAddr, r.Host, To, With)
+		http.Redirect(w, r, To, With)
 	})
 
 	// Start HTTP Server
