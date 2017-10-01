@@ -10,4 +10,4 @@ build:
 	docker build -t $(image) .
 
 deploy:
-	docker run -d -p 80:8080 redirector
+	docker run -d -p 80:8080 $(image)
