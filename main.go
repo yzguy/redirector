@@ -2,10 +2,11 @@ package main
 
 import (
 	"fmt"
-	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"log"
 	"net/http"
+
+	"gopkg.in/yaml.v2"
 )
 
 type Config struct {
@@ -47,7 +48,7 @@ func main() {
 			return
 		}
 
-		To := config.Redirects[r.Host].To
+		To := config.Redirects[r.Host].To + r.URL.RequestURI()
 		With := config.Redirects[r.Host].With
 
 		log.Printf("Client: %s %s -> %s (%d)\n", r.RemoteAddr, r.Host, To, With)
