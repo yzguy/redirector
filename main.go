@@ -2,10 +2,11 @@ package main
 
 import (
 	"fmt"
-	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"log"
 	"net/http"
+
+	"gopkg.in/yaml.v2"
 )
 
 type Config struct {
@@ -19,8 +20,9 @@ type Server struct {
 }
 
 type Redirect struct {
-	To   string `yaml:"to"`
-	With int    `yaml:"with"`
+	To         string `yaml:"to"`
+	With       int    `yaml:"with"`
+	RetainPath bool   `yaml:"retain_path"`
 }
 
 func main() {
@@ -47,8 +49,12 @@ func main() {
 			return
 		}
 
-		To := config.Redirects[r.Host].To
-		With := config.Redirects[r.Host].With
+		redirect := config.Redirects[r.Host]
+		To := redirect.To
+		if redirect.RetainPath {
+			To += r.URL.RequestURI()
+		}
+		With := redirect.With
 
 		log.Printf("Client: %s %s -> %s (%d)\n", r.RemoteAddr, r.Host, To, With)
 		http.Redirect(w, r, To, With)

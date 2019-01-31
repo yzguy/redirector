@@ -11,3 +11,4 @@ redirects:
   site2.domain.com:
     to: https://www.google.com/
     with: 301
+    retain_path: true
